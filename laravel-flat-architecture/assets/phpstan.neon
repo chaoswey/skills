@@ -1,0 +1,38 @@
+# 注意：這份設定是「全面禁止」版本，PHPStan 沒辦法判斷一段 Eloquent
+# 呼叫是不是 1~5 行、無分支的簡單操作，所以規則本身沒辦法做這種細膩區分。
+#
+# 如果團隊採用 laravel-flat-architecture skill 的建議（簡單操作可以留在
+# Controller），遇到確實判斷過、不需要拆的簡單案例，請在該行程式碼上方
+# 加上一行明確放行，而不是放寬這份設定檔的規則：
+#
+#     // @phpstan-ignore-next-line 簡單查詢+存檔，脈絡清楚，不拆 Query
+#     $event = Event::where('id', $id)->first();
+#
+# 這樣每個例外都是開發者有意識留下的紀錄，方便日後 Code Review 追蹤，
+# 而不是讓規則整體變模糊、大家各自解讀「簡單」的標準。
+
+includes:
+    - vendor/larastan/larastan/extension.neon
+    - vendor/spaze/phpstan-disallowed-calls/extension.neon
+
+parameters:
+    level: 0
+    paths:
+        - app/Http/Controllers
+
+    disallowedMethodCalls:
+        - method: Illuminate\Database\Eloquent\Model::save
+          message: "❌ 禁止在 Controller 內直接使用 save()，請使用 Mutations！"
+        - method: Illuminate\Database\Eloquent\Model::update
+          message: "❌ 禁止在 Controller 內直接使用 update()，請使用 Mutations！"
+        - method: Illuminate\Database\Eloquent\Model::delete
+          message: "❌ 禁止在 Controller 內直接使用 delete()，請使用 Mutations！"
+
+        - method: Illuminate\Database\Eloquent\Builder::where
+          message: "❌ 禁止在 Controller 內直接使用 where()，請使用 Queries！"
+        - method: Illuminate\Database\Eloquent\Builder::find
+          message: "❌ 禁止在 Controller 內直接使用 find()，請使用 Queries！"
+        - method: Illuminate\Database\Eloquent\Builder::first
+          message: "❌ 禁止在 Controller 內直接使用 first()，請使用 Queries！"
+        - method: Illuminate\Database\Eloquent\Builder::get
+          message: "❌ 禁止在 Controller 內直接使用 get()，請使用 Queries！"
