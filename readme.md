@@ -1,80 +1,208 @@
 # Laravel Skills / Laravel 技能集
 
-This repository contains reusable OpenCode skills for Laravel architecture and data modeling.
+Reusable OpenCode Skills for designing Laravel applications with **Flat Architecture** and **explicit data modeling**.
 
-聚焦 Laravel 架構設計與跨層資料建模。
+可重複使用的 OpenCode Skills，協助以 **Flat Architecture** 與 **明確的資料建模** 設計 Laravel 應用程式。
 
-## Skills / 技能列表
+---
 
-### [laravel-flat-architecture](laravel-flat-architecture)
+## What this repository provides / Repository 目的
 
-**EN:** A lightweight Laravel application structure for small and medium projects. It keeps controllers thin by organizing business operations as focused `Mutation` and `Query` classes, using project-owned `AsObject` and `AsFake` traits instead of `laravel-actions`.
+These skills focus on two complementary aspects of Laravel application design:
 
-**ZH-TW：** 適合中小型 Laravel 專案的扁平式架構。用專注的小型 `Mutation` / `Query` 類別整理商業操作，讓 Controller 保持單薄，並使用專案自有的 `AsObject`、`AsFake` trait 取代 `laravel-actions`。
+本 Repository 提供兩個互補的 Laravel 設計技能：
 
-Use this skill when working on:
+- **laravel-flat-architecture**
+    - Defines **where business behavior belongs**.
+    - 決定商業邏輯應該放在哪裡。
 
-- Laravel controller actions or route handlers
-- Service / Repository alternatives
-- Oversized service classes
-- Mutation / Query folder structure
-- Architecture rules enforced by PHPStan
+- **laravel-dto-value-object**
+    - Defines **how data crosses application boundaries**.
+    - 決定跨層資料應該如何建模。
 
-適用情境：
+Together they help keep Laravel applications:
 
-- 撰寫或審查 Laravel Controller / route handler
-- 討論是否取代 Service / Repository
-- 拆分過大的 Service 類別
-- 規劃 Mutation / Query 目錄結構
-- 用 PHPStan 做架構規則檢查
+兩者搭配可讓 Laravel 專案保持：
 
-### [laravel-dto-value-object](laravel-dto-value-object)
+- Explicit / 明確
+- Searchable / 好搜尋
+- Type-safe / 型別友善
+- Easy to test / 易於測試
+- Without unnecessary abstraction / 避免過度抽象
 
-**EN:** A companion skill for Laravel Flat Architecture. It defines when to use named arguments, DTOs, Value Objects, or Entities for data crossing Controller, Mutation, Query, Event, Job, and external API boundaries.
+---
 
-**ZH-TW：** Laravel Flat Architecture 的搭配技能。用來判斷跨越 Controller、Mutation、Query、Event、Job、外部 API 邊界的資料，應該使用 named arguments、DTO、Value Object，或 Entity。
-
-Use this skill when working on:
-
-- Controller input passed into `Mutation::run()` or `Query::run()`
-- Validated request data passed into business logic
-- Event or Job payload design
-- External API request / response modeling
-- Replacing unclear `array $data` or `$request->all()` flows
-
-適用情境：
-
-- Controller 將輸入傳給 `Mutation::run()` 或 `Query::run()`
-- 表單驗證後的資料要進入商業邏輯
-- 設計 Event 或 Job payload
-- 建模外部 API request / response
-- 取代不清楚的 `array $data` 或 `$request->all()` 流程
-
-## Language Files / 語言檔案
-
-Each skill includes English and Traditional Chinese versions:
-
-每個技能都包含英文與繁體中文版本：
+## Architecture Overview
 
 ```text
-SKILL.md        English version
-SKILL_zh-TW.md  Traditional Chinese version
+Controller
+      │
+      ▼
+DTO / Value Object
+      │
+      ▼
+Mutation / Query
+      │
+      ▼
+Eloquent Model
 ```
 
-## Recommended Usage / 建議使用方式
+- **Flat Architecture** decides where behavior lives.
+- **DTO / Value Object** decides how data crosses boundaries.
 
-Use both Laravel skills together when designing new Laravel features:
+- **Flat Architecture** 決定行為放在哪裡。
+- **DTO / Value Object** 決定資料如何跨越系統邊界。
 
-設計新的 Laravel 功能時，建議兩個技能一起使用：
+---
 
-1. `laravel-flat-architecture` decides where behavior belongs: `Mutation`, `Query`, or controller.
-2. `laravel-dto-value-object` decides what shape boundary-crossing data should have: named arguments, DTO, Value Object, or Entity.
+# Skills / 技能列表
 
-1. `laravel-flat-architecture` 判斷行為應該放在 `Mutation`、`Query`，還是留在 Controller。
-2. `laravel-dto-value-object` 判斷跨邊界資料應該長什麼樣子：named arguments、DTO、Value Object，或 Entity。
+## laravel-flat-architecture
 
-## Design Direction / 設計方向
+**EN**
 
-**EN:** Keep Laravel applications explicit, searchable, type-friendly, and easy to test without adding unnecessary abstraction.
+A lightweight Laravel architecture for small and medium-sized projects.
 
-**ZH-TW：** 讓 Laravel 應用保持明確、好搜尋、利於型別分析、容易測試，同時避免不必要的抽象層。
+Instead of growing large Service classes, business logic is organized into small, focused **Mutation** and **Query** classes, keeping Controllers thin and easy to understand.
+
+Examples use lightweight project-owned `AsObject` and `AsFake` traits instead of depending on `laravel-actions`.
+
+**ZH-TW**
+
+適合中小型 Laravel 專案的輕量 Flat Architecture。
+
+將商業邏輯拆分成單一職責的 **Mutation** / **Query** 類別，而不是累積到大型 Service，讓 Controller 保持單純且容易閱讀。
+
+範例採用專案自有的 `AsObject`、`AsFake` trait，不依賴 `laravel-actions`。
+
+### Use this skill when
+
+- Designing Controller actions
+- Replacing oversized Service classes
+- Evaluating Service vs Mutation / Query
+- Organizing application folders
+- Enforcing architecture rules with PHPStan
+
+### 適用情境
+
+- 撰寫或審查 Controller
+- 拆分大型 Service
+- 評估是否使用 Mutation / Query
+- 規劃目錄結構
+- 使用 PHPStan 驗證架構規則
+
+---
+
+## laravel-dto-value-object
+
+**EN**
+
+A companion skill for Laravel Flat Architecture.
+
+It helps determine whether boundary-crossing data should be modeled as:
+
+- Named arguments
+- DTO
+- Value Object
+- Entity
+
+Applicable across:
+
+- Controller
+- Mutation
+- Query
+- Event
+- Job
+- External API
+
+**ZH-TW**
+
+Laravel Flat Architecture 的搭配技能。
+
+協助判斷跨越系統邊界的資料應使用：
+
+- Named arguments
+- DTO
+- Value Object
+- Entity
+
+適用於：
+
+- Controller
+- Mutation
+- Query
+- Event
+- Job
+- 外部 API
+
+### Use this skill when
+
+- Passing validated request data
+- Designing Event payloads
+- Designing Job payloads
+- Modeling external APIs
+- Replacing unclear `array $data`
+- Replacing `$request->all()`
+
+### 適用情境
+
+- 驗證後資料進入商業邏輯
+- 設計 Event Payload
+- 設計 Job Payload
+- 建模外部 API
+- 取代 `array $data`
+- 取代 `$request->all()`
+
+---
+
+## Repository Structure
+
+```text
+skills/
+├── laravel-flat-architecture/
+│   ├── SKILL.md
+│   └── SKILL_zh-TW.md
+│
+└── laravel-dto-value-object/
+    ├── SKILL.md
+    └── SKILL_zh-TW.md
+```
+
+---
+
+## Recommended Usage
+
+Use both skills together when designing new Laravel features.
+
+| Skill | Responsibility |
+|--------|----------------|
+| laravel-flat-architecture | Decide where business behavior belongs |
+| laravel-dto-value-object | Decide how boundary-crossing data should be modeled |
+
+---
+
+## Design Philosophy
+
+We prefer:
+
+- Thin Controllers
+- Small Mutation / Query classes
+- Explicit data boundaries
+- Strong typing
+- Easy static analysis
+- Easy testing
+- Minimal abstraction
+
+---
+
+## 設計理念
+
+本 Repository 希望 Laravel 專案能保持：
+
+- Controller 保持單薄
+- Mutation / Query 單一職責
+- 明確的資料邊界
+- 型別友善
+- 容易進行 PHPStan 靜態分析
+- 容易測試
+- 避免不必要的抽象層
