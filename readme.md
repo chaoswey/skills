@@ -11,6 +11,23 @@ Together, they help Laravel projects stay explicit, searchable, type-friendly, t
 
 ---
 
+## Installation
+
+Install all skills from this repository:
+
+```bash
+npx skills add chaoswey/skills
+```
+
+Install one skill:
+
+```bash
+npx skills add chaoswey/skills/laravel-flat-architecture
+npx skills add chaoswey/skills/laravel-dto-value-object
+```
+
+---
+
 ## Skills
 
 | Skill | Focus |
@@ -146,6 +163,23 @@ These skills prefer:
 - `laravel-dto-value-object`：決定資料應該如何跨越應用程式邊界。
 
 兩者搭配可讓 Laravel 專案保持明確、好搜尋、型別友善、容易測試，並避免不必要的抽象層。
+
+---
+
+## 安裝
+
+安裝此 repository 的全部 skills：
+
+```bash
+npx skills add chaoswey/skills
+```
+
+只安裝單一 skill：
+
+```bash
+npx skills add chaoswey/skills/laravel-flat-architecture
+npx skills add chaoswey/skills/laravel-dto-value-object
+```
 
 ---
 
